@@ -60,70 +60,29 @@ diacritic(regular,accentedCharacters) {
 			SendInput % umlautOption
 		}
 	} else {
-		if (GetKeyState("Shift") or GetKeyState("Capslock","T")) {
-			SendInput % "+" regular
-		} else {
-			SendInput % regular
+		Pressed := ""
+
+		if (GetKeyState("Shift", "P")) {
+			Pressed := Pressed . "+"
 		}
-	}
-}
 
-;
-; Alt + Shift + key
-;
-*!1::altShift("¡","/")
-*!2::altShift("?","?")
-*!3::altShift("£","?")
-*!4::altShift("¢","?")
-*!5::altShift("8","fi")
-*!6::altShift("§","fl")
-*!7::altShift("¶","?")
-*!8::altShift("?","°")
-*!9::altShift("ª","·")
-*!0::altShift("º","?")
+		if (GetKeyState("LAlt")) {
+			Pressed := Pressed . "<!"
+		}
 
-*!a::altShift("å","Å")
-*!b::altShift("integral","i")
-*!c::altShift("ç","Ç")
-*!d::altShift("partial difference","Î")
-*!e::altShift("´","?")
-*!f::altShift("?","Ï")
-*!g::altShift("©","Ì")
-*!h::altShift("overdot","Ó")
-*!i::altShift("^","È")
-*!j::altShift("delta","Ô")
-*!k::altShift("°","Apple")
-*!l::altShift("¬","Ò")
-*!m::altShift("µ","?")
-*!n::altShift("~","?")
-*!o::altShift("ø","Ø")
-*!p::altShift("pi","Pi")
-*!q::altShift("?","?")
-*!r::altShift("®","Â")
-*!s::altShift("ß","Í")
-;*!t::altShift("?","Ê")
-*!u::altShift("¨","Ë")
-*!v::altShift("v","lozenge")
-*!w::altShift("epsilon","?")
-*!x::altShift("approximately equal","Ù")
-*!y::altShift("¥","Á")
-*!z::altShift("Omega","Û")
+		if (GetKeyState("RAlt")) {
+			Pressed := Pressed . ">!"
+		}
 
-*!-::altShift("?","?")
-*!=::altShift("!=","±")
-*![::altShift("?","?")
-*!]::altShift("?","?")
-*!`;::altShift("?","Ú")
-*!'::altShift("æ","Æ")
-*!\::altShift("«","»")
-*!,::altShift("<=","¯")
-*!.::altShift(">=","breve")
-*!/::altShift("÷","¿")
+		if (GetKeyState("RCtrl")) {
+			Pressed := Pressed . "^"
+		}
 
-altShift(accented,accentedShift) {
-	if (!GetKeyState("Shift")) {
-		SendInput % accented
-	} else {
-		SendInput % accentedShift
+		if (GetKeyState("LCtrl")) {
+			Pressed := Pressed . "^"
+		}
+
+		Pressed := Pressed . regular
+		SendInput %Pressed%
 	}
 }
