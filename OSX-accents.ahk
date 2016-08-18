@@ -15,6 +15,9 @@
 *u::diacritic("u","ù,Ù,ú,Ú,û,Û,u,U,ü,Ü")
 *n::diacritic("n","n,N,n,N,n,N,ñ,Ñ,n,N")
 *y::diacritic("y","y,Y,y,Y,y,Y,y,Y,ÿ,?")
+*!c::altShift("ç","Ç")
++!2::Send, {LAlt Down}{NumPad0}{Numpad1}{numpad2}{numpad8}{LAlt Up}
+
 
 diacritic(regular,accentedCharacters) {
 	StringSplit, char, accentedCharacters, `,
@@ -60,29 +63,46 @@ diacritic(regular,accentedCharacters) {
 			SendInput % umlautOption
 		}
 	} else {
-		Pressed := ""
-
-		if (GetKeyState("Shift", "P")) {
-			Pressed := Pressed . "+"
-		}
-
-		if (GetKeyState("LAlt")) {
-			Pressed := Pressed . "<!"
-		}
-
-		if (GetKeyState("RAlt")) {
-			Pressed := Pressed . ">!"
-		}
-
-		if (GetKeyState("RCtrl")) {
-			Pressed := Pressed . "^"
-		}
-
-		if (GetKeyState("LCtrl")) {
-			Pressed := Pressed . "^"
-		}
-
-		Pressed := Pressed . regular
-		SendInput %Pressed%
+		normalizedSendRaw(regular)
 	}
+}
+
+altShift(accented,accentedShift) {
+	if (GetKeyState("Ctrl")) {
+		normalizedSendRaw(accented)
+		return
+	}
+
+	if (!GetKeyState("Shift")) {
+		SendInput % accented
+	} else {
+		SendInput % accentedShift
+	}
+}
+
+normalizedSendRaw(regular) {
+	Pressed := ""
+
+	if (GetKeyState("Shift", "P")) {
+		Pressed := Pressed . "+"
+	}
+
+	if (GetKeyState("LAlt")) {
+		Pressed := Pressed . "<!"
+	}
+
+	if (GetKeyState("RAlt")) {
+		Pressed := Pressed . ">!"
+	}
+
+	if (GetKeyState("RCtrl")) {
+		Pressed := Pressed . "^"
+	}
+
+	if (GetKeyState("LCtrl")) {
+		Pressed := Pressed . "^"
+	}
+
+	Pressed := Pressed . regular
+	SendInput %Pressed%
 }
